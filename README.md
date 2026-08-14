@@ -68,3 +68,24 @@ Identified an automated time-based blind SQL injection attack from `40.80.148.42
 
 **Screenshot:**
 ![SQL Injection Detection](results/sql_injection_detection.jpg)
+
+
+## Detection 4: Shellshock (CVE-2014-6271) Exploitation Attempt
+
+**MITRE ATT&CK Mapping:** T1190 (Exploit Public-Facing Application)
+
+**Sourcetype:** `suricata`
+
+**Query:**
+```spl
+index=botsv1 sourcetype=suricata "alert.signature"="ET WEB_SERVER Possible CVE-2014-6271 Attempt" | table _time, src_ip, dest_ip, "alert.signature", "http.url"
+```
+
+**What it does:**
+This query found Suricata alerts for exploit attempts targeting Shellshock (CVE-2014-6271). This was a critical remote code execution vulnerability in Bash that allowed attackers to execute arbitrary commands through specially crafted environment variables. They commonly delivered these through vulnerable CGI (Common Gateway Interface) web endpoints.
+
+**Finding:**
+Found an automated Shellshock exploitation attempt from `40.80.148.42` against `192.168.250.70`. This was the same attacker and target from the SQL injection detection above. The attacker systematically probed a wide range of common CGI script paths (`/cgi-bin/`, `/cgi-sys/`, `/cgi-mod/`) rapidly in succession. This behavior is consistent with testing for exploitable legacy CGI endpoints through an automated vulnerability scanner. This suggests that the same threat actor conducted exploitation attempts and multi-vector reconnaissance against the target web server.
+
+**Screenshot:**
+![Shellshock CVE-2014-6271 Detection](results/shellshock_cve_2014_6271_detection.jpg)
