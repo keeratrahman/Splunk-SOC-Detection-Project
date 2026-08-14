@@ -47,3 +47,24 @@ Found `WINWORD.EXE` opening a macro-enabled template (`Miranda_Tate_unveiled.dot
 
 **Screenshot:**
 ![Office Macro Spawning Command Shell](results/office_macro_spawning_cmd_detection.png)
+
+
+## Detection 3: Time-Based Blind SQL Injection Attempt
+
+**MITRE ATT&CK Mapping:** T1190 (Exploit Public-Facing Application)
+
+**Sourcetype:** `suricata`
+
+**Query:**
+```spl
+index=botsv1 sourcetype=suricata "alert.signature"="ET WEB_SERVER Possible SQL Injection Attempt SELECT FROM" | table _time, src_ip, dest_ip, "alert.signature", "http.url"
+```
+
+**What it does:**
+Query finds Suricata alerts for SQL injection attempts against the web server. It shows the specific URL/parameter targeted, ng with the source and destination IPs.
+
+**Finding:**
+Identified an automated time-based blind SQL injection attack from `40.80.148.42` against a Joomla-based web application at ip address `192.168.250.70`. The attacker tests multiple URL parameters systematically (`catid`, `format`, `id`, `Itemid`, `searchphrase`, `searchword`) using `SLEEP()`-based injection payloads with varying delay values. From this technique, the attacker can infer that an injection was successful when there is no visible direct database output. The attacker's use of a rapid, systematic pattern across many parameters was consistent with automated SQL injection tooling (e.g., sqlmap) rather than manual testing, giving it away.
+
+**Screenshot:**
+![SQL Injection Detection](results/sql_injection_detection.jpg)

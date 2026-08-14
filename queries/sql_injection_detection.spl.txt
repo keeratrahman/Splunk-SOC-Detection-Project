@@ -1,0 +1,1 @@
+index=botsv1 sourcetype=suricata "alert.signature"="ET WEB_SERVER Possible SQL Injection Attempt SELECT FROM" | table _time, src_ip, dest_ip, "alert.signature", "http.url"
