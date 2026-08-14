@@ -110,3 +110,24 @@ Found persistent malformed DNS traffic originating from an interal dns server, `
 
 **Screenshot:**
 ![Malformed DNS Traffic Detection](results/malformed_dns_traffic_detection.jpg)
+
+
+## Detection 6: High-Risk Denied Traffic (Perimeter Scanning Activity)
+
+**MITRE ATT&CK Mapping:** T1595 (Active Scanning), T1110 (Brute Force - targeted services)
+
+**Sourcetype:** `fgt_traffic`
+
+**Query:**
+```spl
+index=botsv1 sourcetype=fgt_traffic action=deny crlevel=high | stats count by srcip, srccountry, service, dstport | sort -count
+```
+
+**What it does:**
+This query identifies firewall-denied connections that were classified as high risk by Fortinet's built-in risk engine. They are grouped by source IP, country of origin, targeted service, and destination port to identify scanning and probing patterns at the network perimeter.
+
+**Finding:**
+Found widespread, high-risk scanning activity from source IPs across multiple countries (China, Colombia, Netherlands, Taiwan, France, and others). They predominantly targeted TELNET (port 23), a legacy insecure protocol commonly targeted by IoT botnets and automated scanners searching for default-credential devices. They also targeted services including SSH, MS-SQL, and SMB, indicating broad, opportunistic scanning consistent with routine internet background noise. Due to its sheer amount of denied events, one notable anomaly stood out with an internal address (`192.168.69.104`) as it generated 1,472 high-risk denied events targeting `udp/8612`. This should warrant separate investigation for unusual internal-to-external denied traffic.
+
+**Screenshot:**
+![High-Risk Denied Traffic Detection](results/high_risk_denied_traffic_detection.jpg)

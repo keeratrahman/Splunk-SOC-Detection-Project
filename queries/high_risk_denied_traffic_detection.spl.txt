@@ -1,0 +1,1 @@
+index=botsv1 sourcetype=fgt_traffic action=deny crlevel=high | stats count by srcip, srccountry, service, dstport | sort -count
