@@ -89,3 +89,24 @@ Found an automated Shellshock exploitation attempt from `40.80.148.42` against `
 
 **Screenshot:**
 ![Shellshock CVE-2014-6271 Detection](results/shellshock_cve_2014_6271_detection.jpg)
+
+
+## Detection 5: Malformed DNS Traffic
+
+**MITRE ATT&CK Mapping:** T1071.004 (Application Layer Protocol: DNS) — potential protocol abuse or evasion
+
+**Sourcetype:** `suricata`
+
+**Query:**
+```spl
+index=botsv1 sourcetype=suricata "alert.signature"="SURICATA DNS malformed request data" | stats count by src_ip, dest_ip, dest_port | sort -count
+```
+
+**What it does:**
+This query identifies Suricata alerts for structurally malformed DNS packets. It groups them by source, destination, and port. These groupings help to identify patterns in where this anomalous traffic is happening.
+
+**Finding:**
+Found persistent malformed DNS traffic originating from an interal dns server, `192.168.250.20`, directed at multiple destination hosts, primarily `192.168.250.100`, with additional activity toward `192.168.2.50`. Due to the traffic repeats consistently across many different destination ports, the behavior suggests a systemic issue rather than an isolated event. While Suricata could not fully parse these packets to extract query details (consistent with the "malformed" classification), the persistent and repeated nature of this traffic across multiple hosts warrants further investigation to rule out evasion attempts, a misconfigured/compromised DNS service, or DNS Protocol Abuse.
+
+**Screenshot:**
+![Malformed DNS Traffic Detection](results/malformed_dns_traffic_detection.jpg)

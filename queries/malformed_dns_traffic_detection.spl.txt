@@ -1,0 +1,1 @@
+index=botsv1 sourcetype=suricata "alert.signature"="SURICATA DNS malformed request data" | stats count by src_ip, dest_ip, dest_port | sort -count
