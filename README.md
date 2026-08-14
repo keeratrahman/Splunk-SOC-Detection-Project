@@ -26,3 +26,24 @@ Host `we9041srv.waynecorpinc.local` warrants further investigation and should be
 
 **Screenshot:**
 ![Privilege Escalation by Host](results/privilege_escalation_detection_by_host.jpg)
+
+
+## Detection 2: Office Application Spawning Command Shell (Suspicious Parent-Child Process)
+
+**MITRE ATT&CK Mapping:** T1566 (Phishing), T1059.005 (Command and Scripting Interpreter: VBScript), T1027 (Obfuscated Files or Information)
+
+**Sourcetype:** `xmlwineventlog:microsoft-windows-sysmon/operational`
+
+**Query:**
+```spl
+index=botsv1 sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" | spath | search "Event.System.EventID"=1 | eval combined=mvzip('Event.EventData.Data{@Name}', 'Event.EventData.Data', "=") | search combined="ParentImage=*winword.exe*" OR combined="ParentImage=*excel.exe*" OR combined="ParentImage=*iexplore.exe*" | table Event.System.Computer, combined
+```
+
+**What it does:**
+This query finds events where Microsoft Word, Excel, or Internet Explorer spawn child processes. These applications have no reason to launch a command shell or script interpreter, which is a strong indicator of malicious exploit-driven code execution or macro execution.
+
+**Finding:**
+Found `WINWORD.EXE` opening a macro-enabled template (`Miranda_Tate_unveiled.dotm`). This template then spawned `cmd.exe` (suspicious behavior mentioned earlier), executing a heavily obfuscated VBScript payload written to `%APPDATA%`. This behavior, which is an initial-access and execution technique commonly used in phishing attacks, was clearly performing a malicious Office macro downloading and executing a secondary payload.
+
+**Screenshot:**
+![Office Macro Spawning Command Shell](results/office_macro_spawning_cmd_detection.png)
