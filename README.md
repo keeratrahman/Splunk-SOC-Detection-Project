@@ -1,4 +1,3 @@
-# splunkLab1
 # Splunk SOC Detection Project
 
 Built detections against the Splunk BOTS v1 dataset, mapped to MITRE ATT&CK techniques. Includes SPL queries, findings, and screenshots for each detection.
