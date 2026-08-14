@@ -1,5 +1,7 @@
 # Splunk SOC Detection Project
 
+![Dashboard Screenshot](DashboardScreenshot.jpg)
+
 Built detections against the Splunk BOTS v1 dataset, mapped to MITRE ATT&CK techniques. Includes SPL queries, findings, and screenshots for each detection.
 
 **Tools:** Splunk, Docker, SPL, MITRE ATT&CK
