@@ -1,0 +1,1 @@
+index=botsv1 sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" | spath | search "Event.System.EventID"=1 | eval combined=mvzip('Event.EventData.Data{@Name}', 'Event.EventData.Data', "=") | search combined="ParentImage=*winword.exe*" OR combined="ParentImage=*excel.exe*" OR combined="ParentImage=*iexplore.exe*" | table Event.System.Computer, combined

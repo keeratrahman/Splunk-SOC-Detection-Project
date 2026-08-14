@@ -1,0 +1,1 @@
+index=botsv1 sourcetype=wineventlog:security EventCode=4672 | stats count by ComputerName | sort -count
