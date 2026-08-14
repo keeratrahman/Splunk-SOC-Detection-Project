@@ -46,7 +46,7 @@ This query finds events where Microsoft Word, Excel, or Internet Explorer spawn 
 Found `WINWORD.EXE` opening a macro-enabled template (`Miranda_Tate_unveiled.dotm`). This template then spawned `cmd.exe` (suspicious behavior mentioned earlier), executing a heavily obfuscated VBScript payload written to `%APPDATA%`. This behavior, which is an initial-access and execution technique commonly used in phishing attacks, was clearly performing a malicious Office macro downloading and executing a secondary payload.
 
 **Screenshot:**
-![Office Macro Spawning Command Shell](results/office_macro_spawning_cmd_detection.png)
+![Office Macro Spawning Command Shell](results/office_macro_spawning_cmd_detection.jpg)
 
 
 ## Detection 3: Time-Based Blind SQL Injection Attempt
